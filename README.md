@@ -6,7 +6,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/Roundcube-1.7.x-37BEFF?logo=roundcube&logoColor=white" alt="Roundcube 1.7.x">
-  <img src="https://img.shields.io/badge/Node.js-24%2B-339933?logo=nodedotjs&logoColor=white" alt="Node.js 24+ for building">
+  <img src="https://img.shields.io/badge/Node.js-24.15.x_%7C_26%2B-339933?logo=nodedotjs&logoColor=white" alt="Node.js 24.15.x or 26+ for building">
   <img src="https://img.shields.io/badge/Tailwind_CSS-v4-06B6D4?logo=tailwindcss&logoColor=white" alt="Tailwind CSS v4">
   <img src="https://img.shields.io/badge/JavaScript-vanilla-F7DF1E?logo=javascript&logoColor=black" alt="Vanilla JavaScript UI">
   <a href="#license"><img src="https://img.shields.io/badge/License-CC_BY--SA_3.0-lightgrey" alt="Creative Commons Attribution-ShareAlike 3.0"></a>
@@ -50,7 +50,7 @@ By **[Ahmed Nefzaoui](https://github.com/anefzaoui)** · `roundcube-ultimate-gma
 
 - **Roundcube 1.7.x**, already installed and configured for your IMAP/SMTP server.
 - **Elastic installed alongside this skin** — plugin templates can inherit from it.
-- **Node.js 24+ and npm** on the machine that builds the assets. Node is not required to serve the built theme.
+- **Node.js 24.15.x or 26+ and npm** on the machine that builds the assets. Node is not required to serve the built theme.
 - **Bash and rsync** if you use the included deployment helper.
 
 ### 🛠️ Build from source
