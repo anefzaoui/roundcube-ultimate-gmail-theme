@@ -305,14 +305,16 @@ export const mailUI = {
       for (const uid of Object.keys(rc.message_list?.rows || {})) syncReadAction(uid);
     });
 
-    // back buttons / panel switching on phones
+    // back buttons / panel switching on phones and full-page message view (action=show)
     document.addEventListener('click', (e) => {
       const a = e.target.closest('a.back-list-button, a.back-sidebar-button, a.task-menu-button');
       if (!a) return;
       e.preventDefault();
       if (a.classList.contains('back-sidebar-button')) showPanel('sidebar');
       else if (a.classList.contains('task-menu-button')) html.classList.toggle('nav-open');
-      else showPanel('list');
+      else if (!document.getElementById('layout-list') && a.closest('#layout-content')) {
+        rc.command('list');
+      } else showPanel('list');
     });
 
     rc.addEventListener('init', () => {

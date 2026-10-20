@@ -143,6 +143,10 @@ export function openDialog(o = {}) {
       if (handle.closed) return;
       handle.closed = true;
       document.removeEventListener('keydown', onKey);
+      document.querySelectorAll('.gm-select-list.gm-open').forEach((n) => {
+        n.classList.remove('gm-open');
+        n.remove();
+      });
       stack = stack.filter((h) => h !== handle);
       scrim.remove();
       if (!stack.length) document.documentElement.classList.remove('gm-modal-open');

@@ -3,7 +3,31 @@
 <roundcube:add_label name="loading" />
 <roundcube:include file="includes/menu.html" condition="!env:framed && !env:extwin" />
 
+<roundcube:if condition="!env:framed && !env:extwin" />
+<!-- folders list (rendered in the left nav column under the Compose button, see layout.css) -->
+<div id="layout-sidebar" class="listbox" role="navigation" aria-labelledby="aria-label-folderlist">
+	<div class="header">
+		<a class="button icon back-list-button" href="#back"><span class="inner"><roundcube:label name="back" /></span></a>
+		<span class="header-title username"><roundcube:object name="username" /></span>
+		<roundcube:button name="folderactions" type="link" title="folderactions" label="actions"
+			class="button icon sidebar-menu" innerclass="inner" data-popup="mailboxoptions-menu" />
+	</div>
+	<h2 id="aria-label-folderlist" class="voice"><roundcube:label name="arialabelfolderlist" /></h2>
+	<div id="folderlist-content" class="scroller">
+		<roundcube:object name="mailboxlist" id="mailboxlist" class="treelist listing folderlist" folder_filter="mail" unreadwrap="%s" />
+	</div>
+	<div class="footer small">
+		<roundcube:if condition="env:quota" />
+			<div id="quotadisplay" class="quota-widget hidden">
+				<span class="voice"><roundcube:label name="quota"></span>
+				<roundcube:object name="quotaDisplay" class="count" display="text" />
+			</div>
+		<roundcube:endif />
+	</div>
+</div>
+<roundcube:else />
 <roundcube:object name="mailboxlist" folder_filter="mail" type="js" />
+<roundcube:endif />
 
 <h1 class="voice"><roundcube:label name="arialabelmailpreviewframe" /></h1>
 
@@ -11,7 +35,7 @@
 	<roundcube:if condition="!env:framed" />
 		<h2 id="aria-label-toolbar" class="voice"><roundcube:label name="arialabeltoolbar" /></h2>
 		<div class="header" role="toolbar" aria-labelledby="aria-label-toolbar">
-			<a class="button icon back-list-button" href="#back"><span class="inner"><roundcube:label name="back" /></span></a>
+			<a class="button icon back-list-button" href="#back" title="<roundcube:label name="back" />"><span class="inner"><roundcube:label name="back" /></span></a>
 			<span class="header-title"></span>
 			<roundcube:include file="includes/mail-menu.html" />
 		</div>
@@ -64,6 +88,19 @@
 </div>
 
 <!-- popup menus -->
+<roundcube:if condition="!env:framed && !env:extwin" />
+<div id="mailboxoptions-menu" class="popupmenu">
+	<h3 id="aria-label-mailboxoptions-menu" class="voice"><roundcube:label name="arialabelmailboxmenu" /></h3>
+	<ul class="menu listing" role="menu" aria-labelledby="aria-label-mailboxoptions-menu">
+		<roundcube:button command="expunge" type="link-menuitem" label="compact" class="expunge disabled" classAct="expunge active" />
+		<roundcube:button command="purge" type="link-menuitem" label="empty" class="purge disabled" classAct="purge active" />
+		<roundcube:button command="mark-all-read" type="link-menuitem" label="markallread" class="read disabled" classAct="read active" />
+		<roundcube:button command="folders" task="settings" type="link-menuitem" label="managefolders" class="folders disabled" classAct="folders active" />
+		<roundcube:container name="mailboxoptions" id="mailboxoptionsmenu" />
+	</ul>
+</div>
+<roundcube:endif />
+
 <div id="attachmentmenu" class="popupmenu">
 	<h3 id="aria-label-attachmentmenu" class="voice"><roundcube:label name="arialabelattachmentmenu" /></h3>
 	<ul class="menu listing" role="menu" aria-labelledby="aria-label-attachmentmenu">

@@ -235,7 +235,7 @@
 
   .gm-select-list {
     position: fixed;
-    z-index: 1000;
+    z-index: 1350;
     display: none;
     overflow: auto;
     padding: 8px 0;

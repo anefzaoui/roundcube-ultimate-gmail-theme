@@ -21,7 +21,8 @@
   }
 
   body.task-settings .gm-nav-tasks,
-  body.task-addressbook .gm-nav-tasks {
+  body.task-addressbook .gm-nav-tasks,
+  body.task-mail.action-compose .gm-nav-tasks {
     display: flex;
   }
 

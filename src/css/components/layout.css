@@ -5,7 +5,10 @@
     display: grid;
     height: 100%;
     grid-template-rows: var(--spacing-header) auto minmax(0, 1fr);
-    grid-template-columns: var(--spacing-nav) minmax(320px, 2fr) minmax(0, 3fr);
+    grid-template-columns: var(--spacing-nav) var(--gm-list-width, minmax(320px, 2fr)) minmax(
+        0,
+        3fr
+      );
     grid-template-areas:
       'header header header'
       'menu list content'
@@ -17,7 +20,9 @@
   /* Below 1025px, three useful columns no longer fit. */
   @media (width > 1024px) {
     html.nav-collapsed #layout {
-      grid-template-columns: var(--spacing-nav-rail) minmax(320px, 2fr) minmax(0, 3fr);
+      grid-template-columns:
+        var(--spacing-nav-rail) var(--gm-list-width, minmax(320px, 2fr))
+        minmax(0, 3fr);
     }
 
     /* settings: same shell as mail — sections list lives in the nav column; pages without a
@@ -35,25 +40,45 @@
     }
 
     body.task-settings #layout:has(> #layout-list) {
-      grid-template-columns: var(--spacing-nav) minmax(280px, 1fr) minmax(0, 2fr);
+      grid-template-columns: var(--spacing-nav) var(--gm-list-width, minmax(280px, 1fr)) minmax(
+          0,
+          2fr
+        );
     }
 
     html.nav-collapsed body.task-settings #layout:has(> #layout-list) {
-      grid-template-columns: var(--spacing-nav-rail) minmax(280px, 1fr) minmax(0, 2fr);
+      grid-template-columns:
+        var(--spacing-nav-rail) var(--gm-list-width, minmax(280px, 1fr))
+        minmax(0, 2fr);
     }
 
     /* address book: names only in the list → narrow column, card gets the room */
     body.task-addressbook #layout {
-      grid-template-columns: var(--spacing-nav) 360px minmax(0, 1fr);
+      grid-template-columns: var(--spacing-nav) var(--gm-list-width, 360px) minmax(0, 1fr);
     }
 
     html.nav-collapsed body.task-addressbook #layout {
-      grid-template-columns: var(--spacing-nav-rail) 360px minmax(0, 1fr);
+      grid-template-columns: var(--spacing-nav-rail) var(--gm-list-width, 360px) minmax(0, 1fr);
     }
 
     /* hairline between the list pane and the content pane (mail, contacts, settings) */
     #layout-list + #layout-content {
+      position: relative;
       border-left: 1px solid var(--color-outline-variant);
+    }
+
+    html.gm-resizing,
+    html.gm-resizing * {
+      cursor: col-resize !important;
+      user-select: none !important;
+    }
+
+    html.gm-resizing #layout {
+      transition: none !important;
+    }
+
+    html.gm-resizing iframe {
+      pointer-events: none !important;
     }
 
     /* a content header with nothing but an (empty) title is dead space on desktop */
@@ -115,7 +140,11 @@
         'sidebar list';
     }
 
-    body.layout-list #layout-content {
+    html.nav-collapsed body.layout-list #layout {
+      grid-template-columns: var(--spacing-nav-rail) minmax(0, 1fr);
+    }
+
+    body.layout-list:not(.action-show):not(.action-compose) #layout-content {
       grid-area: list;
     }
   }
@@ -249,6 +278,73 @@
   .button.icon.task-menu-button,
   .button.icon.toolbar-menu-button {
     display: none;
+  }
+
+  /* full-page message view (action=show): show back-to-list arrow in content toolbar like Gmail */
+  body.task-mail.action-show #layout-content > .header > .button.icon.back-list-button {
+    display: inline-flex;
+  }
+
+  /* Draggable split-pane resizer between #layout-list and #layout-content */
+  .gm-pane-resizer {
+    display: none;
+  }
+
+  @media (width > 1024px) {
+    body:not(.layout-list) #layout-list + #layout-content > .gm-pane-resizer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: -5px;
+      width: 10px;
+      cursor: col-resize;
+      z-index: 25;
+      touch-action: none;
+    }
+
+    body:not(.layout-list) #layout-list + #layout-content > .gm-pane-resizer::before {
+      content: '';
+      width: 3px;
+      height: 100%;
+      border-radius: 2px;
+      background: transparent;
+      transition: background-color 120ms var(--ease-standard);
+    }
+
+    body:not(.layout-list) #layout-list + #layout-content > .gm-pane-resizer::after {
+      content: '';
+      position: absolute;
+      width: 4px;
+      height: 36px;
+      border-radius: 4px;
+      background: var(--color-outline);
+      opacity: 0;
+      transition:
+        opacity 120ms var(--ease-standard),
+        background-color 120ms var(--ease-standard);
+    }
+
+    body:not(.layout-list) #layout-list + #layout-content > .gm-pane-resizer:hover::before,
+    html.gm-resizing
+      body:not(.layout-list)
+      #layout-list
+      + #layout-content
+      > .gm-pane-resizer::before {
+      background: rgb(26 115 232 / 0.25);
+    }
+
+    body:not(.layout-list) #layout-list + #layout-content > .gm-pane-resizer:hover::after,
+    html.gm-resizing
+      body:not(.layout-list)
+      #layout-list
+      + #layout-content
+      > .gm-pane-resizer::after {
+      opacity: 1;
+      background: var(--color-primary);
+    }
   }
 
   /* ---------- tablet / phone: one panel at a time ---------- */

@@ -43,6 +43,101 @@ function placeSidebar(mode) {
   }
 }
 
+function initPaneResizer() {
+  const layoutEl = document.getElementById('layout');
+  const listEl = document.getElementById('layout-list');
+  const contentEl = document.getElementById('layout-content');
+  if (!layoutEl || !listEl || !contentEl) return;
+  if (contentEl.querySelector(':scope > .gm-pane-resizer')) return;
+
+  const task =
+    window.rcmail?.env?.task ||
+    (document.body.classList.contains('task-addressbook')
+      ? 'addressbook'
+      : document.body.classList.contains('task-settings')
+        ? 'settings'
+        : 'mail');
+  const storageKey = `gm.list_width.${task}`;
+  const MIN_LIST = 260;
+  const MIN_CONTENT = 320;
+
+  const clampWidth = (desired) => {
+    const listLeft = listEl.getBoundingClientRect().left;
+    const avail = layoutEl.clientWidth - listLeft - 16;
+    if (avail <= MIN_LIST + MIN_CONTENT) return Math.max(MIN_LIST, Math.round(avail * 0.45));
+    return Math.round(Math.min(avail - MIN_CONTENT, Math.max(MIN_LIST, desired)));
+  };
+
+  const applySaved = () => {
+    if (window.innerWidth <= 1024 || document.body.classList.contains('layout-list')) return;
+    try {
+      const saved = parseInt(localStorage.getItem(storageKey) || '', 10);
+      if (Number.isFinite(saved) && saved >= MIN_LIST) {
+        layoutEl.style.setProperty('--gm-list-width', `${clampWidth(saved)}px`);
+      }
+    } catch {
+      /* ignore */
+    }
+  };
+
+  applySaved();
+  window.addEventListener('resize', () => {
+    if (layoutEl.style.getPropertyValue('--gm-list-width')) applySaved();
+  });
+
+  const resizer = document.createElement('div');
+  resizer.className = 'gm-pane-resizer';
+  resizer.setAttribute('role', 'separator');
+  resizer.setAttribute('aria-orientation', 'vertical');
+  resizer.title = 'Panel genişliğini ayarlamak için sürükleyin (Sıfırlamak için çift tıklayın)';
+  contentEl.prepend(resizer);
+
+  resizer.addEventListener('dblclick', (e) => {
+    e.preventDefault();
+    layoutEl.style.removeProperty('--gm-list-width');
+    try {
+      localStorage.removeItem(storageKey);
+    } catch {
+      /* ignore */
+    }
+  });
+
+  resizer.addEventListener('pointerdown', (e) => {
+    if (e.button !== 0) return;
+    e.preventDefault();
+    const startX = e.clientX;
+    const startWidth = listEl.getBoundingClientRect().width;
+    let currentWidth = startWidth;
+    html.classList.add('gm-resizing');
+    try {
+      resizer.setPointerCapture(e.pointerId);
+    } catch {
+      /* ignore */
+    }
+
+    const onMove = (ev) => {
+      currentWidth = clampWidth(startWidth + (ev.clientX - startX));
+      layoutEl.style.setProperty('--gm-list-width', `${currentWidth}px`);
+    };
+
+    const onEnd = () => {
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onEnd);
+      window.removeEventListener('pointercancel', onEnd);
+      html.classList.remove('gm-resizing');
+      try {
+        localStorage.setItem(storageKey, String(Math.round(currentWidth)));
+      } catch {
+        /* ignore */
+      }
+    };
+
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onEnd);
+    window.addEventListener('pointercancel', onEnd);
+  });
+}
+
 export const layout = {
   mode: null,
   touch: false,
@@ -61,6 +156,7 @@ export const layout = {
     this.touch = detectTouch();
     this.mode = screenMode();
     placeSidebar(this.mode);
+    initPaneResizer();
     window.addEventListener('resize', () => {
       const m = screenMode();
       if (m !== this.mode) {

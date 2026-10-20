@@ -135,7 +135,7 @@ function enhanceSelect(sel) {
     const listWidth = list.getBoundingClientRect().width;
     list.style.left = `${Math.max(8, Math.min(r.left, document.documentElement.clientWidth - listWidth - 8))}px`;
     const below = window.innerHeight - r.bottom;
-    const h = Math.min(list.scrollHeight, 320, Math.max(below - 8, r.top - 8));
+    const h = Math.min(list.scrollHeight, 360, Math.max(below - 8, r.top - 8));
     list.style.maxHeight = `${h}px`;
     list.style.top = below >= h + 8 ? `${r.bottom + 4}px` : `${r.top - h - 4}px`;
     (list.querySelector('.selected') || list.querySelector('.gm-select-option'))?.focus();
@@ -150,7 +150,7 @@ function enhanceSelect(sel) {
     if (focusBtn) btn.focus();
   };
   const onOutside = (e) => {
-    if (!list.contains(e.target) && e.target !== btn) closeList(false);
+    if (!list.contains(e.target) && !btn.contains(e.target)) closeList(false);
   };
   const choose = (idx) => {
     if (!sel.options[idx] || sel.options[idx].disabled || sel.options[idx].parentElement.disabled) {
