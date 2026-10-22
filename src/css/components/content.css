@@ -103,8 +103,12 @@
   a.rcmaddcontact {
     display: inline-grid;
     place-items: center;
+    flex: 0 0 24px;
     width: 24px;
     height: 24px;
+    min-width: 24px;
+    min-height: 24px;
+    aspect-ratio: 1 / 1;
     margin-left: 2px;
     border-radius: 50%;
     vertical-align: middle;

@@ -163,9 +163,16 @@
   table.messagelist:not(.records-table) td.selection {
     display: flex;
     align-items: center;
-    width: 20px;
-    margin-right: 12px;
+    justify-content: center;
+    align-self: stretch;
+    width: 38px;
+    min-height: 100%;
+    margin-left: -10px;
+    margin-right: 4px;
+    padding: 0 10px;
     flex-shrink: 0;
+    cursor: pointer;
+    overflow: visible;
   }
 
   table.messagelist:not(.records-table) td.selection > input[type='checkbox'] {

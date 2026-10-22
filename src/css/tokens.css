@@ -49,9 +49,7 @@
   --spacing-panel-w: 320px;
 
   /* ---- shadows (Gmail literals) ---- */
-  --shadow-row-hover:
-    inset 1px 0 0 var(--color-outline-variant), inset -1px 0 0 var(--color-outline-variant),
-    0 1px 2px 0 rgb(60 64 67 / 0.3), 0 1px 3px 1px rgb(60 64 67 / 0.15);
+  --shadow-row-hover: inset 0 -1px 0 var(--color-row-divider);
   --shadow-menu:
     0 8px 10px 1px rgb(0 0 0 / 0.14), 0 3px 14px 2px rgb(0 0 0 / 0.12),
     0 5px 5px -3px rgb(0 0 0 / 0.2);
@@ -167,9 +165,7 @@ html.dark-mode {
   --color-state-focus: rgb(227 227 227 / 0.12);
   --color-state-selected: rgb(168 199 250 / 0.16);
 
-  --shadow-row-hover:
-    inset 1px 0 0 rgb(255 255 255 / 0.2), inset -1px 0 0 rgb(255 255 255 / 0.2),
-    0 0 4px 0 rgb(95 99 104 / 0.6), 0 0 6px 2px rgb(95 99 104 / 0.6);
+  --shadow-row-hover: inset 0 -1px 0 var(--color-row-divider);
 
   color-scheme: dark;
 }

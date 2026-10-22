@@ -132,14 +132,15 @@
 
   input[type='checkbox']:focus-visible,
   input[type='radio']:focus-visible {
-    box-shadow: 0 0 0 8px var(--color-state-focus);
+    box-shadow: none;
     outline: none;
     border-color: var(--color-primary);
   }
 
   input[type='checkbox']:hover,
   input[type='radio']:hover {
-    box-shadow: 0 0 0 8px var(--color-state-hover);
+    box-shadow: none;
+    border-color: var(--color-on-surface);
   }
 
   label {

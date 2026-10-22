@@ -166,7 +166,7 @@
 
   .gm-avatar:hover {
     text-decoration: none;
-    box-shadow: 0 0 0 4px var(--color-state-hover);
+    box-shadow: none;
   }
 
   .gm-avatar-initial {

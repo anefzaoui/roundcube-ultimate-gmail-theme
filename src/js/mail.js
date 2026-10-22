@@ -46,6 +46,10 @@ function decorateRow(row) {
   const el = row?.obj;
   if (!el || el.dataset.gm) return;
   el.dataset.gm = '1';
+  const selCell = el.querySelector('td.selection');
+  if (selCell) {
+    selCell.addEventListener('mousedown', (e) => e.stopPropagation());
+  }
   const subjectCell = el.querySelector('td.subject');
   const flagsCell = el.querySelector('td.flags');
   if (!subjectCell) return;
@@ -205,7 +209,11 @@ function buildSummary() {
   for (const tr of details.querySelectorAll('tr')) {
     const title = tr.querySelector('.header-title')?.textContent.trim().toLowerCase();
     const cell = tr.querySelector('td:not(.header-title)');
-    if (title && cell) rows[title] = cell;
+    if (!cell) continue;
+    if (title) rows[title] = cell;
+    for (const key of ['from', 'sender', 'to', 'cc', 'bcc', 'replyto', 'date']) {
+      if (cell.classList.contains(key)) rows[key] = cell;
+    }
   }
   const fromCell = rows.from || rows.sender;
   const from = fromCell?.querySelector('.adr');

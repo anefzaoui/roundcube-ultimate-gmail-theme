@@ -1,14 +1,16 @@
-/* Snackbars: bottom-left, inverse surface, 52px, action text in inverse-primary. */
+/* Snackbars: top-right, inverse surface, 48px, status icon on left, close button on far right. */
 @layer components {
   #messagestack,
   .gm-toasts {
     position: fixed;
-    left: 24px;
-    bottom: 24px;
+    top: 24px;
+    right: 24px;
+    left: auto;
+    bottom: auto;
     z-index: 1200;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: flex-end;
     gap: 8px;
     max-width: min(560px, calc(100vw - 48px));
     pointer-events: none;
@@ -18,12 +20,12 @@
   .gm-toast {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
     width: max-content;
     max-width: 100%;
     min-width: 280px;
     min-height: 48px;
-    padding: 12px 8px 12px 24px;
+    padding: 10px 8px 10px 16px;
     border-radius: var(--radius-sm);
     background: var(--color-inverse-surface);
     color: var(--color-inverse-on-surface);
@@ -31,7 +33,7 @@
     box-shadow: var(--shadow-fab-hover);
     pointer-events: auto;
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(-8px);
     transition:
       opacity 150ms var(--ease-standard),
       transform 150ms var(--ease-standard);
@@ -59,14 +61,23 @@
     color: #4a3800;
   }
 
-  #messagestack > div.confirmation::before,
-  .gm-toast.confirmation::before,
-  #messagestack > div.error::before,
-  .gm-toast.error::before {
+  #messagestack > div:not(.loading)::before,
+  .gm-toast:not(.loading)::before {
     font-family: var(--font-icons);
     font-size: 20px;
     line-height: 1;
+    flex-shrink: 0;
+    content: var(--ico-info);
+  }
+
+  #messagestack > div.confirmation::before,
+  .gm-toast.confirmation::before {
     content: var(--ico-check-circle);
+  }
+
+  #messagestack > div.warning::before,
+  .gm-toast.warning::before {
+    content: var(--ico-warning);
   }
 
   #messagestack > div.error::before,
@@ -95,6 +106,8 @@
     place-items: center;
     width: 32px;
     height: 32px;
+    margin-left: auto;
+    flex-shrink: 0;
     border-radius: 50%;
     color: inherit;
   }
@@ -122,9 +135,10 @@
   @media (width <= 600px) {
     #messagestack,
     .gm-toasts {
+      top: 8px;
       left: 8px;
       right: 8px;
-      bottom: 8px;
+      bottom: auto;
       max-width: none;
     }
   }

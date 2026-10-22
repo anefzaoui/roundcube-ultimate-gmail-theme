@@ -243,12 +243,17 @@
     display: none !important;
   }
 
-  /* panel switch buttons only exist on small screens */
+  /* panel switch buttons only exist on small screens (except full-page show/compose) */
   .button.icon.back-list-button,
   .button.icon.back-sidebar-button,
   .button.icon.task-menu-button,
   .button.icon.toolbar-menu-button {
     display: none;
+  }
+
+  body.task-mail.action-show:not(.extwin) #layout-content > .header > .button.icon.back-list-button,
+  body.task-mail.action-compose:not(.extwin) #layout-content > .header > .button.icon.back-list-button {
+    display: inline-flex;
   }
 
   /* ---------- tablet / phone: one panel at a time ---------- */

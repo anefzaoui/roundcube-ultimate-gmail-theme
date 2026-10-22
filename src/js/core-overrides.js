@@ -62,6 +62,9 @@ export function installCoreOverrides() {
   const coreOpenWindow = rcmail.open_window;
   rcmail.open_window = function (url, small, toolbar) {
     const isCompose = /[?&]_action=compose(&|$)/.test(url || '');
+    if (isCompose && this.env.framed && window.parent && window.parent !== window && window.parent.rcmail) {
+      return window.parent.rcmail.open_window(url, small, toolbar);
+    }
     const smallScreen = layout.mode === 'phone' || layout.mode === 'small';
     if (
       isCompose &&
@@ -74,9 +77,17 @@ export function installCoreOverrides() {
     }
     return coreOpenWindow.call(this, url, small, toolbar);
   };
+  if (typeof rcmail.open_compose_step === 'function') {
+    const coreOpenComposeStep = rcmail.open_compose_step;
+    rcmail.open_compose_step = function (p) {
+      if (this.env.framed && window.parent && window.parent !== window && window.parent.rcmail?.open_compose_step) {
+        return window.parent.rcmail.open_compose_step(p);
+      }
+      return coreOpenComposeStep.call(this, p);
+    };
+  }
   if (
     !rcmail.env.extwin &&
-    !rcmail.env.framed &&
     rcmail.env.task === 'mail' &&
     rcmail.env.action !== 'compose'
   ) {

@@ -28,7 +28,9 @@
     white-space: nowrap;
   }
 
+  #layout-content > .gm-compose-head .toolbar,
   .gm-compose-head .toolbar {
+    flex: 0 0 auto;
     margin-left: auto;
   }
 
@@ -673,20 +675,41 @@
     border-radius: var(--radius-sm);
   }
 
+  .tox:not([dir='rtl']) .tox-toolbar__group:not(:last-of-type) {
+    border-right: 0 !important;
+    position: relative;
+    padding-right: 5px !important;
+  }
+
+  .tox:not([dir='rtl']) .tox-toolbar__group:not(:last-of-type)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 18px;
+    background: var(--color-outline-variant);
+  }
+
   .tox .tox-editor-header {
     box-shadow: none !important;
-    padding: 4px 0 !important;
+    padding: 4px 0 0 !important;
     border: 0 !important;
     order: 2;
   }
 
-  .tox .tox-tbtn {
+  .tox .tox-tbtn,
+  .tox .tox-split-button {
     color: var(--color-on-surface-variant) !important;
     border-radius: var(--radius-xs) !important;
+    box-shadow: none !important;
   }
 
-  .tox .tox-tbtn:hover {
+  .tox .tox-tbtn:hover,
+  .tox .tox-split-button:hover {
     background: var(--color-state-hover) !important;
+    box-shadow: none !important;
   }
 
   .tox .tox-tbtn--enabled {
@@ -694,8 +717,16 @@
     color: var(--color-on-secondary-container) !important;
   }
 
-  .tox .tox-tbtn svg {
+  .tox .tox-tbtn svg,
+  .tox .tox-split-button svg {
     fill: currentcolor !important;
+    display: block;
+  }
+
+  .tox .tox-tbtn__select-chevron svg,
+  .tox .tox-split-button__chevron svg {
+    width: 16px;
+    height: 16px;
   }
 
   .tox .tox-edit-area__iframe {
@@ -732,7 +763,7 @@
 
     .gm-compose-bar {
       gap: 4px;
-      padding: 8px;
+      padding: 12px 16px 14px;
     }
 
     .gm-compose-tools {
